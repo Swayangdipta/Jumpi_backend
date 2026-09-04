@@ -1,0 +1,10 @@
+node_modules
+/node_modules
+.env
+.env.example
+logs
+coverage
+migrate.js
+schema
+/schema
+init-test-db.js
