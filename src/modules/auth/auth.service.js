@@ -274,3 +274,30 @@ export const forceLogin = async (mobile) => {
     };
 
 };
+
+export const getAccounts = async (mobile) => {
+    const customers = await AuthQuery.findCustomersByMobile(mobile);
+    return customers.map(customerResponse);
+};
+
+export const switchAccount = async ({ cid, mobile }) => {
+    const customer = await AuthQuery.findCustomerById(cid);
+
+    if (!customer) {
+        throw new ApiError(404, "Customer not found.");
+    }
+
+    if (customer.mobile !== mobile) {
+        throw new ApiError(403, "Unauthorized to switch to this account.");
+    }
+
+    const token = generateToken(customer);
+
+    return {
+        message: "Switched account successfully.",
+        data: {
+            token,
+            customer: customerResponse(customer)
+        }
+    };
+};

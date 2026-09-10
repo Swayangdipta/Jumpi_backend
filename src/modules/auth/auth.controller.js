@@ -73,3 +73,16 @@ export const logout = asyncHandler(async (req, res) => {
     );
 
 });
+
+export const getAccounts = asyncHandler(async (req, res) => {
+    const mobile = req.user.mobile;
+    const accounts = await AuthService.getAccounts(mobile);
+    return successResponse(res, "Accounts fetched successfully.", accounts);
+});
+
+export const switchAccount = asyncHandler(async (req, res) => {
+    const mobile = req.user.mobile;
+    const { cid } = req.body;
+    const response = await AuthService.switchAccount({ cid, mobile });
+    return successResponse(res, response.message, response.data);
+});

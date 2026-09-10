@@ -39,3 +39,7 @@ export const registerSchema = z.object({
 
     address: z.string().trim().optional().or(z.literal(""))
 });
+
+export const switchSchema = z.object({
+    cid: z.number().int().positive()
+});

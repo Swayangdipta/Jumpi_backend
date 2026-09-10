@@ -25,6 +25,29 @@ export const findCustomerByMobile = async (mobile) => {
 };
 
 /**
+ * Find all customers by mobile number
+ */
+export const findCustomersByMobile = async (mobile) => {
+
+    const [rows] = await db.execute(
+        `
+        SELECT
+            cid,
+            name,
+            email,
+            mobile,
+            status,
+            cstatus
+        FROM customer
+        WHERE mobile = ?
+        `,
+        [mobile]
+    );
+
+    return rows || [];
+};
+
+/**
  * Find customer by id
  */
 export const findCustomerById = async (cid) => {

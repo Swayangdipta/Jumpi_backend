@@ -7,7 +7,8 @@ import validate from "../../middleware/validate.middleware.js";
 import {
     loginSchema,
     verifyOtpSchema,
-    registerSchema
+    registerSchema,
+    switchSchema
 } from "./auth.validation.js";
 
 const router = Router();
@@ -51,6 +52,19 @@ router.post(
     "/logout",
     authMiddleware,
     AuthController.logout
+);
+
+router.get(
+    "/accounts",
+    authMiddleware,
+    AuthController.getAccounts
+);
+
+router.post(
+    "/switch",
+    authMiddleware,
+    validate(switchSchema),
+    AuthController.switchAccount
 );
 
 export default router;
