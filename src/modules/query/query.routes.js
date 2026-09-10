@@ -5,7 +5,8 @@ import authMiddleware
 
 import {
     getQueryHistory,
-    getQueryDetails
+    getQueryDetails,
+    createQuery
 } from "./query.controller.js";
 
 
@@ -23,6 +24,12 @@ router.get(
     "/:id",
     authMiddleware,
     getQueryDetails
+);
+
+router.post(
+    "/",
+    authMiddleware,
+    createQuery
 );
 
 

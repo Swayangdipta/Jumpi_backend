@@ -58,10 +58,7 @@ export const findCustomerForDashboard = async (cid) => {
 
 
 /**
- * Count upcoming/non-cancelled bookings.
- *
- * We intentionally don't use status = '1' because the legacy
- * schema doesn't document what that value means.
+ * Count Total Activity from booking table where status=1
  */
 export const countActiveBookings = async (customerId) => {
     const [rows] = await db.execute(
@@ -69,8 +66,7 @@ export const countActiveBookings = async (customerId) => {
         SELECT COUNT(*) AS total
         FROM booking
         WHERE cusref = ?
-          AND date >= CURDATE()
-          AND cancellation_flag = 0
+          AND status = 1
         `,
         [String(customerId)]
     );
@@ -80,9 +76,60 @@ export const countActiveBookings = async (customerId) => {
 
 
 /**
+ * Count Birthday Parties from bill table where status=1
+ */
+export const countPartyFiles = async (mobile) => {
+    const [rows] = await db.execute(
+        `
+        SELECT COUNT(*) AS total
+        FROM bill
+        WHERE mobile = ?
+          AND status = 1
+        `,
+        [mobile]
+    );
+
+    return Number(rows[0]?.total || 0);
+};
+
+
+/**
+ * Count open customer queries.
+ */
+export const countOpenQueries = async (mobile) => {
+    const [rows] = await db.execute(
+        `
+        SELECT COUNT(*) AS total
+        FROM query
+        WHERE mobile = ?
+          AND status != 'closed'
+        `,
+        [mobile]
+    );
+
+    return Number(rows[0]?.total || 0);
+};
+
+/**
+ * Find stores for dashboard
+ */
+export const findStores = async () => {
+    const [rows] = await db.execute(
+        `
+        SELECT name
+        FROM admin
+        WHERE type = 'store' AND status = 1
+        `
+    );
+
+    return rows || [];
+};
+
+/**
  * Get the customer's next upcoming booking.
  */
 export const findNextVisit = async (customerId) => {
+    // keeping it just in case, though it's removed from dashboard UI
     const [rows] = await db.execute(
         `
         SELECT
@@ -106,51 +153,6 @@ export const findNextVisit = async (customerId) => {
     );
 
     return rows[0] || null;
-};
-
-
-/**
- * Count party/event records for this customer.
- *
- * The legacy bill table does not contain cid, so mobile is used.
- */
-export const countPartyFiles = async (mobile) => {
-    const [rows] = await db.execute(
-        `
-        SELECT COUNT(*) AS total
-        FROM bill
-        WHERE mobile = ?
-        `,
-        [mobile]
-    );
-
-    return Number(rows[0]?.total || 0);
-};
-
-
-/**
- * Count open customer queries.
- *
- * query has no customer ID, therefore mobile is used.
- *
- * We deliberately don't assume that one particular status value
- * means "open" without confirmation from the legacy application's
- * business rules.
- *
- * For now, NULL/empty status is considered open.
- */
-export const countOpenQueries = async (mobile) => {
-    const [rows] = await db.execute(
-        `
-        SELECT COUNT(*) AS total
-        FROM query
-        WHERE mobile = ?
-          AND (status IS NULL OR status = '')
-        `,
-        [mobile]
-    );
-
-    return Number(rows[0]?.total || 0);
 };
 
 
@@ -187,9 +189,6 @@ export const findLatestBill = async (mobile) => {
 
 /**
  * Calculate the total pending amount across the customer's bills.
- *
- * `pending` is VARCHAR in the legacy schema, so we explicitly
- * convert it to a number for aggregation.
  */
 export const getPendingAmount = async (mobile) => {
     const [rows] = await db.execute(

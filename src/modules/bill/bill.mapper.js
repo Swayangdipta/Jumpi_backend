@@ -11,6 +11,7 @@ export const mapBill = (bill) => {
         bookingDate: bill.bdate,
         eventDate: bill.fdate,
         eventTime: bill.ftime,
+        partyDate: bill.dob,
 
         event: {
             type: bill.event_type,

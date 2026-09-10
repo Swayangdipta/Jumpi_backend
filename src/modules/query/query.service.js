@@ -7,7 +7,8 @@ import {
 import {
     findQueriesByMobile,
     countQueriesByMobile,
-    findQueryById
+    findQueryById,
+    insertQuery
 } from "./query.queries.js";
 
 import {
@@ -109,4 +110,22 @@ export const getQueryDetails = async ({
 
 
     return mapQueryDetails(query);
+};
+
+export const createQuery = async (data) => {
+    const customer = await findCustomerForDashboard(data.customerId);
+    if (!customer) {
+        throw new ApiError(404, "Customer profile not found.");
+    }
+    const mobile = customer.mobile;
+
+    const queryId = await insertQuery({
+        name: data.name,
+        email: data.email,
+        mobile: data.mobile || mobile,
+        address: data.address,
+        notes: data.message
+    });
+
+    return { id: queryId };
 };

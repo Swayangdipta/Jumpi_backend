@@ -49,7 +49,8 @@ export const getDashboard = async (cid) => {
         openQueries,
         latestBill,
         pendingAmount,
-        latestEvent
+        latestEvent,
+        stores
     ] = await Promise.all([
         CustomerQuery.countActiveBookings(cid),
 
@@ -73,7 +74,9 @@ export const getDashboard = async (cid) => {
 
         CustomerQuery.findLatestEvent(
             customer.mobile
-        )
+        ),
+
+        CustomerQuery.findStores()
     ]);
 
 
@@ -85,6 +88,7 @@ export const getDashboard = async (cid) => {
         openQueries,
         pendingAmount,
         latestBill,
-        latestEvent
+        latestEvent,
+        stores
     });
 };

@@ -97,3 +97,15 @@ export const getQueryDetails = async (
 
     }
 };
+
+export const createQuery = async (req, res, next) => {
+    try {
+        const query = await QueriesService.createQuery({
+            customerId: req.user.cid,
+            ...req.body
+        });
+        return successResponse(res, "Query created successfully.", query);
+    } catch (error) {
+        next(error);
+    }
+};
