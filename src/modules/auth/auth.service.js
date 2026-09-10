@@ -245,7 +245,13 @@ export const forceLogin = async (mobile) => {
     console.log("customer found: ", customer);
     if (!customer) {
 
-        return ""
+        return {
+            
+            message:
+                "If the mobile number is registered, an OTP has been sent.",
+
+            data: null
+        }
 
     }
 

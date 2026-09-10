@@ -127,13 +127,13 @@ export const insertQuery = async (data) => {
     const date = new Date().toISOString().split('T')[0];
     const time = new Date().toTimeString().split(' ')[0];
     // A simple queryno could just be a timestamp or something, wait, query table has queryno, let's make it null if allowed, or simple random.
-    const queryno = 'Q-' + Date.now();
+    const queryno = 'Q' + Date.now();
 
     const [result] = await db.execute(
         `
         INSERT INTO query (
             date, time, queryno, name, mobile, email, address, notes, status, lead_source
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Open', 'App')
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 'App')
         `,
         [date, time, queryno, data.name || '', data.mobile || '', data.email || '', data.address || '', data.notes || '']
     );
