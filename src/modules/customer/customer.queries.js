@@ -116,9 +116,9 @@ export const countOpenQueries = async (mobile) => {
 export const findStores = async () => {
     const [rows] = await db.execute(
         `
-        SELECT name
+        SELECT uname
         FROM admin
-        WHERE type = 'store' AND status = 1
+        WHERE utype = 'store' AND status = 1
         `
     );
 
