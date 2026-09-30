@@ -2,7 +2,9 @@ import axios from "axios";
 import { env } from "../config/env.js";
 
 export const sendOTP = async (mobile, otp) => {
-    const phone = `91${mobile}`;
+    const phone = `${mobile}`;
+
+    console.log("Sending OTP to:", phone);
 
     try {
         const response = await axios.post(
