@@ -17,7 +17,7 @@ export const register = asyncHandler(async (req, res) => {
 
 export const login = asyncHandler(async (req, res) => {
 
-    const response = await AuthService.forceLogin(req.body);
+    const response = await AuthService.login(req.body);
 
     return successResponse(
         res,
