@@ -5,6 +5,7 @@ export const sendOTP = async (mobile, otp) => {
     const phone = `91${mobile}`;
 
     console.log("Sending OTP to:", phone);
+    console.log("Sending OTP with value:", otp);
 
     try {
         const response = await axios.post(
