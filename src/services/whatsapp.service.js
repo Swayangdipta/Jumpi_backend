@@ -14,14 +14,31 @@ export const sendOTP = async (mobile, otp) => {
                 messaging_product: "whatsapp",
                 to: phone,
                 type: "template",
+
                 template: {
                     name: "loginotpa",
+
                     language: {
                         code: "en"
                     },
+
                     components: [
+                        // BODY
                         {
-                            type: "body",
+                            type: "BODY",
+                            parameters: [
+                                {
+                                    type: "text",
+                                    text: String(otp)
+                                }
+                            ]
+                        },
+
+                        // URL BUTTON
+                        {
+                            type: "button",
+                            sub_type: "url",
+                            index: "0",
                             parameters: [
                                 {
                                     type: "text",
@@ -41,7 +58,10 @@ export const sendOTP = async (mobile, otp) => {
         );
 
         console.log("WhatsApp API status:", response.status);
-        console.log("WhatsApp API response:", response.data);
+        console.log(
+            "WhatsApp API response:",
+            JSON.stringify(response.data, null, 2)
+        );
 
         return response.data;
 
@@ -53,7 +73,7 @@ export const sendOTP = async (mobile, otp) => {
 
         console.error(
             "WhatsApp API response:",
-            error.response?.data
+            JSON.stringify(error.response?.data, null, 2)
         );
 
         console.error(
