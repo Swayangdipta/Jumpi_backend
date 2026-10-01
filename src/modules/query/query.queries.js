@@ -132,8 +132,8 @@ export const insertQuery = async (data) => {
     const [result] = await db.execute(
         `
         INSERT INTO query (
-            date, time, queryno, name, mobile, email, address, notes, status, lead_source
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 'App')
+            date, time, queryno, name, mobile, email, address, notes, status, lead_source, event_type
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 'App', 'Query')
         `,
         [date, time, queryno, data.name || '', data.mobile || '', data.email || '', data.address || '', data.notes || '']
     );
